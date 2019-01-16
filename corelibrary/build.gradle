@@ -1,0 +1,134 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion rootProject.androidVersionConfig.androidCompileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.androidVersionConfig.androidMinSdkVersion
+        targetSdkVersion rootProject.androidVersionConfig.androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    implementation 'com.android.support:support-v4:27.1.1'
+    def support = rootProject.ext.support
+    def rx = rootProject.ext.rx
+    def majorFrame = rootProject.ext.majorFrame
+    def assistance = rootProject.ext.assistance
+
+    //!-- Android Support START
+
+    //noinspection GradleDependency
+    api support.multidex
+    api support.appcompat
+    api support.design
+    api support.recyclerView
+    api support.cardView
+    api support.percent
+    api support.palette
+    api support.flexbox
+    api assistance.utilcode
+
+    //!-- Android Support EDN
+
+    //!-- GMS App Indexing
+
+    //compile 'com.google.android.gms:play-services-appindexing:9.8.0'
+
+    //!-- About View START
+
+    //ButterKnife
+    api majorFrame.ButterKnife
+    annotationProcessor majorFrame.aptButterKnifeCompiler
+
+    //Glide
+    api majorFrame.Glide
+    api majorFrame.GlideOkHttp
+
+    //    api 'com.github.chrisbanes.photoview:library:1.2.4'
+
+    //格式化文本
+
+    //    api 'me.biubiubiu.justifytext:library:1.1'
+
+    //!-- Rx START
+    api rx.rxJava2
+    api rx.rxAndroid2
+    api rx.rxlifecycle2
+    api rx.rxlifecycle2Android
+    api rx.rxlifecycle2Components
+    api rx.rxBinding
+    api rx.rxcache2
+    api rx.rxpermissions2
+    api rx.rxerrorhandler2
+
+    //!-- Rx END
+
+    //!-- EvenBus
+    api majorFrame.EventBus
+
+    //!-- Network START
+    api majorFrame.Gson
+    api majorFrame.retrofit
+    api majorFrame.converterGson
+    api majorFrame.adapterRxJava2
+    api majorFrame.okHttp
+
+    //下载器
+    debugApi assistance.stetho
+    debugApi assistance.stethoOkHttp
+
+    // !-- Network END
+
+    //!-- Other statistics START
+
+    //Bugly
+    api assistance.bugly
+    api assistance.buglyNative
+
+    //Umeng
+    api assistance.umeng
+
+    //!-- LeakCanary START
+    debugApi assistance.leakCanaryDebug
+    releaseApi assistance.leakCanaryRelease
+    testImplementation assistance.leakCanaryTest
+
+    //!-- LeakCanary END
+
+    //!-- Test START
+    testImplementation assistance.junit
+
+    //!-- Test END
+
+    // For pkg
+
+    //    api 'com.leon.channel:helper:1.1.5'
+    api 'jp.wasabeef:glide-transformations:2.0.2'
+
+    //DiskLruCache
+    implementation 'com.jakewharton:disklrucache:2.0.2'
+    implementation 'com.facebook.network.connectionclass:connectionclass:1.0.1'
+    implementation project(':multistateview')
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+    implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+}
