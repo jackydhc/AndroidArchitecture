@@ -13,6 +13,4 @@ public interface AppDelegate {
     GlobalConfig initGlobalConfig();
     OkHttpClient provideOkhttpClient();//
 
-
-
 }

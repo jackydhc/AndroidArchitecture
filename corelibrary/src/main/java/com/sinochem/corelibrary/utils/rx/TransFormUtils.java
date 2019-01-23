@@ -1,8 +1,9 @@
 package com.sinochem.corelibrary.utils.rx;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.FlowableTransformer;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author jackydu
@@ -10,10 +11,15 @@ import rx.schedulers.Schedulers;
  */
 public class TransFormUtils {
 
-    public static <T> Observable.Transformer<T, T> switchSchedulers() {
+    public static <T> ObservableTransformer<T, T> switchSchedulers() {
         return observable -> observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
+    }
+
+    public static <T> FlowableTransformer<T,T> switchDisposable(){
+        return tObservable -> tObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }

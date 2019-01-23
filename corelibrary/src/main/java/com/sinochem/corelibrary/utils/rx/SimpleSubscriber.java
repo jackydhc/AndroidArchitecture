@@ -4,13 +4,14 @@ import com.blankj.utilcode.util.LogUtils;
 import com.sinochem.corelibrary.BuildConfig;
 import com.sinochem.corelibrary.mvp.MvpView;
 
-import rx.Subscriber;
+import org.reactivestreams.Subscriber;
+
 
 /**
  * @author jackydu
  * @date 2019/1/16
  */
-public abstract class SimpleSubscriber<T> extends Subscriber<T> {
+public abstract class SimpleSubscriber<T> implements Subscriber<T> {
 
     @Override
     public void onNext(T t) {
@@ -40,7 +41,7 @@ public abstract class SimpleSubscriber<T> extends Subscriber<T> {
     }
 
     @Override
-    public void onCompleted() {
+    public void onComplete() {
 
     }
     protected abstract void handleNext(T t);

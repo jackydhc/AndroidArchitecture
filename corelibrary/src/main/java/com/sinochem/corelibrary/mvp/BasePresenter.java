@@ -1,37 +1,37 @@
 package com.sinochem.corelibrary.mvp;
 
-import com.sinochem.corelibrary.fragments.BaseFragment;
 
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
- * Base class that implements the Presenter interface and provides a base implementation for
- * attachView() and detachView(). It also handles keeping a reference to the mvpView that
- * can be accessed from the children classes by calling getMvpView().
+ * presenter和view 进行绑定，然后presenter通过观察者模式观察所有
+ * presenter中进行的异步操作，在view的生命周期结束的时候，强制终止
+ * 所有被观测的对象，当然也可以通过被观察对象直接绑定具有主动周期属性
+ * 的view（继承rxlifecycler）
  */
 public abstract class BasePresenter<V extends MvpView> implements IPresenter<V> {
 
     private V mMvpView;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeSubscription;
 
     @Override public void attachView(V mvpView) {
         mMvpView = mvpView;
-        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription = new CompositeDisposable();
     }
 
     @Override public void detachView() {
         //mMvpView = null;
         if (mCompositeSubscription != null) {
-            mCompositeSubscription.unsubscribe();
+            if (mCompositeSubscription.isDisposed()) mCompositeSubscription.dispose();
             mCompositeSubscription = null;
         }
 
     }
 
-    protected void addSubscription(Subscription subscription) {
+    protected void addSubscription(Disposable subscription) {
         if (mCompositeSubscription == null) {
-            mCompositeSubscription = new CompositeSubscription();
+            mCompositeSubscription = new CompositeDisposable();
         }
         mCompositeSubscription.add(subscription);
     }

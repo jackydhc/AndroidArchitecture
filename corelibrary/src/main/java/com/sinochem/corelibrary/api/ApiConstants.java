@@ -11,4 +11,5 @@ public interface ApiConstants {
     int NORMAL_CODE = 0;
     int LOGIN_EXPIRE_CODE = -100;
 
+
 }

@@ -75,11 +75,9 @@ dependencies {
     api rx.rxlifecycle2
     api rx.rxlifecycle2Android
     api rx.rxlifecycle2Components
-    api rx.rxBinding
+//    api rx.rxBinding
     api rx.rxcache2
     api rx.rxpermissions2
-    api rx.rxerrorhandler2
-
     //!-- Rx END
 
     //!-- EvenBus

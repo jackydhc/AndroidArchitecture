@@ -23,13 +23,8 @@ import com.sinochem.corelibrary.utils.UIUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.lang.reflect.Field;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -97,10 +92,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements MvpVie
                 initActionBar(actionBar);
             }
         }
-
         initOnCreate(savedInstanceState);
-        EventBus.getDefault()
-                .register(this);
+//        EventBus.getDefault()
+//                .register(this);
         ActivityManager.get()
                 .add(this);
     }
@@ -135,8 +129,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements MvpVie
 
     @Override protected void onDestroy() {
         fixInputMethodManagerLeak(this);
-        EventBus.getDefault()
-                .unregister(this);
+//        EventBus.getDefault()
+//                .unregister(this);
         ActivityManager.get()
                 .remove(this);
         // Unbind from the service

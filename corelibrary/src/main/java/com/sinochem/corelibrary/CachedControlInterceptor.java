@@ -15,7 +15,7 @@ import okhttp3.Response;
  * date: on 17/2/21 11:10
  * description:
  */
-class CachedControlInterceptor implements Interceptor {
+public class CachedControlInterceptor implements Interceptor {
     @Override public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         if (!NetworkUtils.isAvailableByPing()) {
