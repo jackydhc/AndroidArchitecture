@@ -4,6 +4,7 @@ import com.sinochem.corelibrary.api.ApiResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * @author jackydu
@@ -11,7 +12,9 @@ import retrofit2.http.GET;
  */
 public interface UserApi {
 
-    @GET()
-    Observable<ApiResponse<User>> getUserInfo();
+    @GET("/topic")
+    Observable<ApiResponse<User>> getUserInfo(@Query("lastCursor") String latCursor,
+                                              @Query("pageSize") int pageSize);
+
 
 }

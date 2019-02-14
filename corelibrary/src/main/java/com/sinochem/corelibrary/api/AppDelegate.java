@@ -11,6 +11,4 @@ import okhttp3.OkHttpClient;
 public interface AppDelegate {
 
     GlobalConfig initGlobalConfig();
-    OkHttpClient provideOkhttpClient();//
-
 }

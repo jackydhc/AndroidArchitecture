@@ -24,7 +24,7 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
     SmartRefreshLayout refreshLayout;
 
     private P mPresent;
-    private BaseQuickAdapter<E,BaseViewHolder> mAdapter;
+    private BaseQuickAdapter<E,? extends BaseViewHolder> mAdapter;
 
     //提供类似于layout_base_list的layout
 //    @Override
@@ -33,7 +33,7 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
 //    }
 
 
-    protected abstract BaseQuickAdapter<E,BaseViewHolder> provideAdapter();
+    protected abstract BaseQuickAdapter<E,? extends BaseViewHolder> provideAdapter();
     protected abstract P providePresent();
     protected abstract RecyclerView provideRecyclerView();
     protected abstract RecyclerView.LayoutManager provideLayoutManager();

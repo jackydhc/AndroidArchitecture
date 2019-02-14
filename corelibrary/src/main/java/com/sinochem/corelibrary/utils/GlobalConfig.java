@@ -176,6 +176,11 @@ public class GlobalConfig {
             return this;
         }
 
+        /**
+         * unit second
+         * @param httpOutTime unit second
+         * @return
+         */
         public Builder setTimeOut(int httpOutTime) {
             if (httpOutTime <= 10) throw new ConfigExecption("httpOutTime cannot below 10");
             this.httpOutTime = httpOutTime;
