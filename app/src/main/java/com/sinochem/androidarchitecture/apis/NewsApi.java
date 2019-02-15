@@ -3,7 +3,6 @@ package com.sinochem.androidarchitecture.apis;
 import com.sinochem.androidarchitecture.enities.HomeListBean;
 import com.sinochem.corelibrary.api.ApiResponse;
 
-import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

@@ -10,6 +10,5 @@ import com.sinochem.corelibrary.mvp.BasePresenter;
 public class HomePresent extends BasePresenter<HomeContract.IView> {
     @Override
     public void start() {
-
     }
 }

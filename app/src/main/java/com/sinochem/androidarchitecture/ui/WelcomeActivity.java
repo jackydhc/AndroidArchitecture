@@ -56,7 +56,7 @@ public class WelcomeActivity extends BaseActivity {
             @Override
             public void run() throws Exception {
                 ToastUtils.showShort("count down end");
-
+                toMain();
             }
         }).doOnCancel(new Action() {
             @Override
@@ -86,5 +86,6 @@ public class WelcomeActivity extends BaseActivity {
     private void toMain(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

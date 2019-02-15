@@ -16,13 +16,21 @@
     </FrameLayout>
     <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        >
+
         <RadioButton
             android:id="@+id/rb_home"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="home"
+            android:gravity="center"
+            android:button="@null"
+            android:drawableTop="@drawable/sino_home_tab_home"
+            android:checked="true"
             />
         <RadioButton
             android:id="@+id/rb_mine"
@@ -30,6 +38,10 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="home"
+            android:gravity="center"
+            android:button="@null"
+            android:drawableTop="@drawable/sino_home_tab_mine"
+
             />
     </RadioGroup>
 </LinearLayout>

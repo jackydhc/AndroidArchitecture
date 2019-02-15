@@ -26,7 +26,8 @@ public class HomeListPresent extends BaseListPresenter<HomeListBean,HomeListData
 
     @Override
     protected List<HomeListDataBean> provideConverter(@NonNull HomeListBean homeListBean) {
-        return null;
+
+        return homeListBean.getData();
     }
 
     @Override

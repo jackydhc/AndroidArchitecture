@@ -49,11 +49,12 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
         recycler.addItemDecoration(getDefaultItemDecoration());
         mPresent = providePresent();
         mPresent.attachView(this);
-        if (mAdapter.isLoadMoreEnable()) mAdapter.setOnLoadMoreListener(mPresent,recycler);
+        if (mAdapter.isLoadMoreEnable() ) mAdapter.setOnLoadMoreListener(mPresent,recycler);
         refreshLayout = provideRefreshLayout();
         if (refreshLayout != null) {
             refreshLayout.setOnRefreshListener(mPresent);
         }
+
 
     }
 

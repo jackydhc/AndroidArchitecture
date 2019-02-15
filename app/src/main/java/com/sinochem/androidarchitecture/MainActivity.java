@@ -3,7 +3,9 @@ package com.sinochem.androidarchitecture;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.text.LoginFilter;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -33,6 +35,7 @@ public class MainActivity extends BaseActivity {
     RadioButton rbMine;
     private FragmentManager fm;
     private int lastIndex;
+    private Fragment lastFragment;
 
 
     @Override
@@ -45,7 +48,8 @@ public class MainActivity extends BaseActivity {
         if (fm == null) fm = getSupportFragmentManager();
         Fragment home = fm.getFragment(new Bundle(), "home");
         if (home == null) home = new HomeFragment();
-        fm.beginTransaction().add(home,"home").commit();
+        fm.beginTransaction().add(R.id.container,home,"home").commit();
+        lastFragment = home;
     }
 
     @Override
@@ -59,25 +63,33 @@ public class MainActivity extends BaseActivity {
     }
     @OnClick({R.id.rb_home, R.id.rb_mine})
     public void onViewClicked(View view) {
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
         switch (view.getId()) {
             case R.id.rb_home:
                if (lastIndex == 0)return;
                lastIndex = 0;
                 Fragment home = fm.getFragment(new Bundle(), "home");
-                if (home == null) {
-                    home = new HomeFragment();
-                    fm.beginTransaction().add(R.id.content,home,"home").commit();
-                }else fm.beginTransaction().show(home).commit();
+
+                if (home == null) home = Fragment.instantiate(this,HomeFragment.class.getName());
+                setTab(fragmentTransaction,home,HomeFragment.class.getSimpleName());
                 break;
             case R.id.rb_mine:
                 if (lastIndex == 1)return;
                 lastIndex = 1;
                 Fragment user = fm.getFragment(new Bundle(), "user");
-                if (user == null) {
-                    user = new Userfragment();
-                    fm.beginTransaction().add(R.id.content,user,"user").commit();
-                }else fm.beginTransaction().show(user).commit();
+                if (user == null) user = Fragment.instantiate(this,Userfragment.class.getName());
+                setTab(fragmentTransaction,user, Userfragment.class.getSimpleName());
                 break;
         }
+    }
+
+    private void setTab(FragmentTransaction transaction,Fragment fragment,String tag){
+        if (lastFragment != null) {
+            transaction.hide(lastFragment);
+        }
+        if (fragment.isAdded()) transaction.show(fragment);
+        else transaction.add(R.id.container,fragment,tag);
+        transaction.commitAllowingStateLoss();
+        lastFragment = fragment;
     }
 }
