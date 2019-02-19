@@ -55,7 +55,7 @@ public class WelcomeActivity extends BaseActivity {
                 }).doOnComplete(new Action() {
             @Override
             public void run() throws Exception {
-                ToastUtils.showShort("count down end");
+//                ToastUtils.showShort("count down end");
                 toMain();
             }
         }).doOnCancel(new Action() {

@@ -1,5 +1,6 @@
 package com.sinochem.corelibrary.fragments;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.sinochem.corelibrary.mvp.BasePresenter;
 import com.sinochem.corelibrary.mvp.multiState.IMultiView;
 import com.sinochem.multistateview.MultiStateView;
@@ -10,7 +11,7 @@ import com.sinochem.multistateview.MultiStateView;
  */
 public abstract class BaseMultiFragment<P extends BasePresenter<? extends IMultiView>> extends LazyFragment<P> implements IMultiView{
 
-    MultiStateView multiStateView;
+    public MultiStateView multiStateView;
 
     @Override
     public void onPause() {
@@ -19,6 +20,7 @@ public abstract class BaseMultiFragment<P extends BasePresenter<? extends IMulti
             multiStateView.showEmpty(null);
         }
     }
+
 
     @Override
     public void onDestroy() {
@@ -31,6 +33,7 @@ public abstract class BaseMultiFragment<P extends BasePresenter<? extends IMulti
     @Override
     public void showLoading() {
         if (multiStateView != null) {
+            LogUtils.d("multistate","showloading");
             multiStateView.showLoading();
         }
     }

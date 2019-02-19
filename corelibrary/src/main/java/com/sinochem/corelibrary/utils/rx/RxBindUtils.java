@@ -22,11 +22,11 @@ public class RxBindUtils {
      * @return
      */
     public static <T> LifecycleTransformer bindToLifecycle(@NonNull MvpView view) {
-        Preconditions.checkNotNull(view, "view == null");
+        Preconditions.checkNotNull(view, "container == null");
         if (view instanceof LifecycleProvider) {
             return ((LifecycleProvider) view).bindToLifecycle();
         } else {
-            throw new IllegalArgumentException("view isn't Lifecycleable");
+            throw new IllegalArgumentException("container isn't Lifecycleable");
         }
     }
 

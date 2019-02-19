@@ -23,7 +23,6 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
     RecyclerView recycler;
     SmartRefreshLayout refreshLayout;
 
-    private P mPresent;
     private BaseQuickAdapter<E,? extends BaseViewHolder> mAdapter;
 
     //提供类似于layout_base_list的layout
@@ -34,7 +33,6 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
 
 
     protected abstract BaseQuickAdapter<E,? extends BaseViewHolder> provideAdapter();
-    protected abstract P providePresent();
     protected abstract RecyclerView provideRecyclerView();
     protected abstract RecyclerView.LayoutManager provideLayoutManager();
     protected abstract SmartRefreshLayout provideRefreshLayout();
@@ -47,15 +45,12 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
         mAdapter = provideAdapter();
         recycler.setAdapter(mAdapter);
         recycler.addItemDecoration(getDefaultItemDecoration());
-        mPresent = providePresent();
-        mPresent.attachView(this);
-        if (mAdapter.isLoadMoreEnable() ) mAdapter.setOnLoadMoreListener(mPresent,recycler);
+        if (mAdapter.isLoadMoreEnable() ) mAdapter.setOnLoadMoreListener(mPresenter,recycler);
         refreshLayout = provideRefreshLayout();
         if (refreshLayout != null) {
-            refreshLayout.setOnRefreshListener(mPresent);
+            refreshLayout.setOnRefreshListener(mPresenter);
         }
-
-
+        showLoading(true);
     }
 
     public RecyclerView.ItemDecoration getDefaultItemDecoration() {
@@ -68,7 +63,6 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresent.detachView();
     }
 
     @Override
@@ -96,7 +90,9 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
         mAdapter.loadMoreComplete();
     }
 
-    @Override public void showContent(List<E> data, boolean refresh) {
+    @Override
+    public void showContent(List<E> data, boolean refresh) {
+        showContent();
         if (refresh) {
             mAdapter.setNewData(data);
         } else {
@@ -112,6 +108,6 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
 
     @Override
     public void showLoading(boolean show) {
-        showLoading();
+        if (show) showLoading();
     }
 }

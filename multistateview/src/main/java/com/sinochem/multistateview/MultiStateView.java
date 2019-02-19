@@ -267,6 +267,7 @@ public class MultiStateView extends FrameLayout {
                     animateLayoutChange(getView(previousState));
                 } else {
                     mLoadingView.setVisibility(View.VISIBLE);
+                    mLoadingView.getAnimation().start();
                 }
                 break;
 
@@ -322,6 +323,13 @@ public class MultiStateView extends FrameLayout {
                     mContentView.setVisibility(View.VISIBLE);
                 }
                 break;
+        }
+    }
+
+    private void stopLaoding(){
+        if (mLoadingView != null ) {
+            if ( mLoadingView.getAnimation() != null) mLoadingView.getAnimation().cancel();
+            mLoadingView.setVisibility(GONE);
         }
     }
 

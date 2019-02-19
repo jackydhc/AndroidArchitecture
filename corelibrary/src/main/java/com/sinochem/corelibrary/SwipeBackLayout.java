@@ -40,7 +40,7 @@ import java.util.Stack;
 /**
  * Swipe or Pull to finish a Activity.
  * <p/>
- * This layout must be a root layout and contains only one direct child view.
+ * This layout must be a root layout and contains only one direct child container.
  * <p/>
  * The activity must use a theme that with translucent style.
  * <style name="Theme.Swipe.Back" parent="AppTheme">
@@ -164,7 +164,7 @@ public class SwipeBackLayout extends ViewGroup {
     }
 
     /**
-     * Find out the scrollable child view from a ViewGroup.
+     * Find out the scrollable child container from a ViewGroup.
      * <p>
      * 树的遍历
      */
@@ -523,7 +523,7 @@ public class SwipeBackLayout extends ViewGroup {
 
             if ((draggingState == ViewDragHelper.STATE_DRAGGING || draggingState == ViewDragHelper.STATE_SETTLING)
                     && state == ViewDragHelper.STATE_IDLE) {
-                // the view stopped from moving.
+                // the container stopped from moving.
                 if (draggingOffset == getDragRange()) {
                     finish();
                 }

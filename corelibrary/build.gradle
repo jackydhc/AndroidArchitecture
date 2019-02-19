@@ -29,6 +29,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     api 'com.android.support:support-v4:27.1.1'
+
     def support = rootProject.ext.support
     def rx = rootProject.ext.rx
     def majorFrame = rootProject.ext.majorFrame

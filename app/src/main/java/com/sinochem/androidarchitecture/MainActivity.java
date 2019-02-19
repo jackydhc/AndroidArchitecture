@@ -11,9 +11,13 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.sinochem.androidarchitecture.ui.fragments.HomeFragment;
+import com.sinochem.androidarchitecture.ui.fragments.HomeListFragment;
 import com.sinochem.androidarchitecture.ui.fragments.Userfragment;
+import com.sinochem.androidarchitecture.ui.fragments.ZhaopingFragment;
 import com.sinochem.corelibrary.base.BaseActivity;
+import com.squareup.haha.perflib.Main;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.BindView;
@@ -68,17 +72,18 @@ public class MainActivity extends BaseActivity {
             case R.id.rb_home:
                if (lastIndex == 0)return;
                lastIndex = 0;
-                Fragment home = fm.getFragment(new Bundle(), "home");
-
-                if (home == null) home = Fragment.instantiate(this,HomeFragment.class.getName());
+                Fragment home = fm.findFragmentByTag( HomeFragment.class.getSimpleName());
+                LogUtils.d("Userfragment",home);
+                if (home == null) home = new HomeFragment();
                 setTab(fragmentTransaction,home,HomeFragment.class.getSimpleName());
                 break;
             case R.id.rb_mine:
                 if (lastIndex == 1)return;
                 lastIndex = 1;
-                Fragment user = fm.getFragment(new Bundle(), "user");
-                if (user == null) user = Fragment.instantiate(this,Userfragment.class.getName());
-                setTab(fragmentTransaction,user, Userfragment.class.getSimpleName());
+                Fragment user = fm.findFragmentByTag(ZhaopingFragment.class.getSimpleName());
+                LogUtils.d("Userfragment",user);
+                if (user == null) user = new ZhaopingFragment();
+                setTab(fragmentTransaction,user, ZhaopingFragment.class.getSimpleName());
                 break;
         }
     }
@@ -89,7 +94,7 @@ public class MainActivity extends BaseActivity {
         }
         if (fragment.isAdded()) transaction.show(fragment);
         else transaction.add(R.id.container,fragment,tag);
-        transaction.commitAllowingStateLoss();
+        transaction.commit();
         lastFragment = fragment;
     }
 }

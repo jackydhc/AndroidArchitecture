@@ -3,6 +3,7 @@ package com.sinochem.corelibrary.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.sinochem.corelibrary.mvp.BasePresenter;
 import com.sinochem.corelibrary.mvp.MvpView;
 
@@ -18,6 +19,7 @@ public abstract class LazyFragment<P extends BasePresenter<? extends MvpView>> e
     @Override public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         this.isVisible = isVisibleToUser;
+        LogUtils.d("lazy","setUserVisibleHint");
         preLoadData(false);
     }
 
@@ -26,6 +28,8 @@ public abstract class LazyFragment<P extends BasePresenter<? extends MvpView>> e
         this.isViewInit = true;
         // 防止一开始加载的时候未 调用 preLoadData 方法， 因为setUserVisibleHint 比 onActivityCreated 触发 前
         if (getUserVisibleHint()) {
+            this.isVisible = true;
+            LogUtils.d("lazy","onActivityCreated");
             preLoadData(false);
         }
     }

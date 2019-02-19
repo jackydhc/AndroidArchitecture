@@ -9,9 +9,18 @@ public class ApiResponse<T> {
     public T data;
     public String msg;
 
+    public ApiResponse(int code, T data, String msg) {
+        this.code = code;
+        this.data = data;
+        this.msg = msg;
+    }
+
+    public ApiResponse() {
+    }
+
     /*
-        { "code":0 }
-     */
+            { "code":0 }
+         */
     public static <T> ApiResponse<T> empty() {
         return new ApiResponse<>();
     }

@@ -26,7 +26,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends RxFragment i
      * 绑定到当前的attach的activity上.可强转
      */
     public Context mContext;
-    protected View view;
+    protected View container;
     protected P mPresenter;
 
 
@@ -40,14 +40,14 @@ public abstract class BaseFragment<P extends BasePresenter> extends RxFragment i
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (view == null) view = inflater.inflate(provideLayoutId(), container, false);
-        ButterKnife.bind(this, view);
+        if (this.container == null) this.container = inflater.inflate(provideLayoutId(), container, false);
+        ButterKnife.bind(this, this.container);
         initOnCreateView();
         mPresenter = providePresent();
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
-        return view;
+        return this.container;
     }
 
     public abstract int provideLayoutId();

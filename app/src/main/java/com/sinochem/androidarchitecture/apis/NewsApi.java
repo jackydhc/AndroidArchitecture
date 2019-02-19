@@ -23,7 +23,7 @@ public interface NewsApi {
      * @return
      */
     @GET("/{type}")
-    Observable<ApiResponse<HomeListBean>> getNewsList(@Path("type") String type,
+    Observable<HomeListBean> getNewsList(@Path("type") String type,
                                                       @Query("lastCursor") String cursor,
                                                       @Query("pageSize") int pageSize
                                                );

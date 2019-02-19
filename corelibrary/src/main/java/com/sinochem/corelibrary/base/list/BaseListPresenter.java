@@ -42,6 +42,7 @@ public abstract class BaseListPresenter<E,T> extends BaseListContract.IRefreshPr
     }
 
     protected void loadData(boolean isRefresh){
+        LogUtils.d(BaseListPresenter.class.getSimpleName(),"loaddata");
         if (isLoading) return;
         isLoading = true;
         Disposable subscribe = provideObservable(isRefresh)
@@ -62,6 +63,7 @@ public abstract class BaseListPresenter<E,T> extends BaseListContract.IRefreshPr
                 }, new ErrorConsumer(getMvpView()) {
                     @Override
                     protected void doError(Throwable throwable) {
+                        isLoading = false;
                         LogUtils.d(BaseListPresenter.class.getSimpleName(),throwable.getMessage());
                     }
                 });
