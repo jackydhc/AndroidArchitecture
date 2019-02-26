@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
  * Created by L on 2016/7/26.
  */
 public abstract class BaseActivity extends RxAppCompatActivity implements MvpView {
-
+    public static final String TAG = BaseActivity.class.getSimpleName();
     public static final String EXTRA_START_MAIN = "start_main";
 
     public boolean isOnPause;

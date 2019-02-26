@@ -5,16 +5,20 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.lang.annotation.Retention;
@@ -24,7 +28,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author jackydu
  * @date 2019/1/14
  */
-public class MultiStateView extends FrameLayout {
+public class MultiStateView extends FrameLayout implements View.OnClickListener {
 
     public static final int VIEW_STATE_UNKNOWN = -1;
 
@@ -36,6 +40,13 @@ public class MultiStateView extends FrameLayout {
 
     public static final int VIEW_STATE_LOADING = 3;
 
+    @Override
+    public void onClick(View v) {
+        if (retryListener != null){
+            retryListener.onRetry();
+        }
+    }
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({VIEW_STATE_UNKNOWN, VIEW_STATE_CONTENT, VIEW_STATE_ERROR, VIEW_STATE_EMPTY, VIEW_STATE_LOADING})
     public @interface ViewState {
@@ -46,7 +57,7 @@ public class MultiStateView extends FrameLayout {
     private View mContentView;
 
     private View mLoadingView;
-
+    private AnimationDrawable mLoadingAnimation;
     private View mErrorView;
 
     private View mEmptyView;
@@ -75,6 +86,11 @@ public class MultiStateView extends FrameLayout {
 
     private void init(AttributeSet attrs) {
         mInflater = LayoutInflater.from(getContext());
+        int childCount = getChildCount();
+        Log.d("multi",""+childCount);
+        if (childCount > 0){
+            mContentView = getChildAt(1);
+        }
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MultiStateView);
 
         int loadingViewResId = a.getResourceId(R.styleable.MultiStateView_msv_loadingView, -1);
@@ -82,6 +98,12 @@ public class MultiStateView extends FrameLayout {
             mLoadingView = mInflater.inflate(loadingViewResId, this, false);
         }else {
             mLoadingView = mInflater.inflate(R.layout.multi_layout_loading,this,false);
+        }
+        if (mLoadingView != null) {
+            ImageView imgLoading = mLoadingView.findViewById(R.id.img_loading);
+            if (imgLoading != null) {
+                mLoadingAnimation = (AnimationDrawable) imgLoading.getDrawable();
+            }
         }
         addView(mLoadingView, mLoadingView.getLayoutParams());
 
@@ -95,6 +117,7 @@ public class MultiStateView extends FrameLayout {
         if (errorViewResId > -1) {
             mErrorView = mInflater.inflate(errorViewResId, this, false);
         }else mErrorView = mInflater.inflate(R.layout.multi_layout_error,this,false);
+        if (mErrorView != null) mErrorView.setOnClickListener(this);
         addView(mErrorView,mErrorView.getLayoutParams());
         int viewState = a.getInt(R.styleable.MultiStateView_msv_viewState, VIEW_STATE_CONTENT);
         mAnimateViewChanges = a.getBoolean(R.styleable.MultiStateView_msv_animateViewChanges, false);
@@ -258,7 +281,6 @@ public class MultiStateView extends FrameLayout {
                 if (mLoadingView == null) {
                     throw new NullPointerException("Loading View");
                 }
-
                 if (mContentView != null) mContentView.setVisibility(View.GONE);
                 if (mErrorView != null) mErrorView.setVisibility(View.GONE);
                 if (mEmptyView != null) mEmptyView.setVisibility(View.GONE);
@@ -267,7 +289,9 @@ public class MultiStateView extends FrameLayout {
                     animateLayoutChange(getView(previousState));
                 } else {
                     mLoadingView.setVisibility(View.VISIBLE);
-                    mLoadingView.getAnimation().start();
+                    if (mLoadingAnimation != null && !mLoadingAnimation.isRunning()) {
+                        mLoadingAnimation.start();
+                    }
                 }
                 break;
 
@@ -277,7 +301,7 @@ public class MultiStateView extends FrameLayout {
                 }
 
 
-                if (mLoadingView != null) mLoadingView.setVisibility(View.GONE);
+                if (mLoadingView != null) stopLaoding();
                 if (mErrorView != null) mErrorView.setVisibility(View.GONE);
                 if (mContentView != null) mContentView.setVisibility(View.GONE);
 
@@ -294,7 +318,7 @@ public class MultiStateView extends FrameLayout {
                 }
 
 
-                if (mLoadingView != null) mLoadingView.setVisibility(View.GONE);
+                if (mLoadingView != null) stopLaoding();
                 if (mContentView != null) mContentView.setVisibility(View.GONE);
                 if (mEmptyView != null) mEmptyView.setVisibility(View.GONE);
 
@@ -313,7 +337,7 @@ public class MultiStateView extends FrameLayout {
                 }
 
 
-                if (mLoadingView != null) mLoadingView.setVisibility(View.GONE);
+                if (mLoadingView != null) stopLaoding();
                 if (mErrorView != null) mErrorView.setVisibility(View.GONE);
                 if (mEmptyView != null) mEmptyView.setVisibility(View.GONE);
 
@@ -327,8 +351,8 @@ public class MultiStateView extends FrameLayout {
     }
 
     private void stopLaoding(){
-        if (mLoadingView != null ) {
-            if ( mLoadingView.getAnimation() != null) mLoadingView.getAnimation().cancel();
+        if (mLoadingAnimation != null && mLoadingAnimation.isRunning()) {
+            mLoadingAnimation.stop();
             mLoadingView.setVisibility(GONE);
         }
     }
@@ -461,5 +485,15 @@ public class MultiStateView extends FrameLayout {
          * @param viewState The {@link ViewState} that was switched to
          */
         void onStateChanged(@ViewState int viewState);
+    }
+    private RetryListener retryListener;
+
+    public void addRetryListener(RetryListener listener){
+        this.retryListener = listener;
+    }
+
+
+    public interface RetryListener{
+        void onRetry();
     }
 }

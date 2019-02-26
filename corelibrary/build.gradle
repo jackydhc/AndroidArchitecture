@@ -126,7 +126,7 @@ dependencies {
     //DiskLruCache
     api 'com.jakewharton:disklrucache:2.0.2'
     implementation 'com.facebook.network.connectionclass:connectionclass:1.0.1'
-    api project(':multistateview')
+    api project(':components:multistateview')
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
     api 'com.yqritc:recyclerview-flexibledivider:1.4.0'

@@ -20,6 +20,8 @@ import com.sinochem.androidarchitecture.contracts.HomeContract;
 import com.sinochem.androidarchitecture.present.HomePresent;
 import com.sinochem.corelibrary.fragments.BaseFragmentPagerAdapter;
 import com.sinochem.corelibrary.fragments.BaseMultiFragment;
+import com.sinochem.corelibrary.fragments.LazyFragment;
+import com.sinochem.multistateview.MultiStateView;
 
 import butterknife.BindView;
 
@@ -28,7 +30,7 @@ import butterknife.BindView;
  * @author jackydu
  * @date 2019/2/1
  */
-public class HomeFragment extends BaseMultiFragment<HomePresent> implements HomeContract.IView{
+public class HomeFragment extends LazyFragment<HomePresent> implements HomeContract.IView{
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.view_pager)

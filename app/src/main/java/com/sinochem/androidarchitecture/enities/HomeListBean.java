@@ -3,13 +3,14 @@ package com.sinochem.androidarchitecture.enities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author jackydu
  * @date 2019/2/1
  */
-public class HomeListBean implements Parcelable{
+public class HomeListBean implements Serializable {
 
 
     /**
@@ -29,18 +30,6 @@ public class HomeListBean implements Parcelable{
         totalItems = in.readInt();
         totalPages = in.readInt();
     }
-
-    public static final Creator<HomeListBean> CREATOR = new Creator<HomeListBean>() {
-        @Override
-        public HomeListBean createFromParcel(Parcel in) {
-            return new HomeListBean(in);
-        }
-
-        @Override
-        public HomeListBean[] newArray(int size) {
-            return new HomeListBean[size];
-        }
-    };
 
     public int getPageSize() {
         return pageSize;
@@ -75,15 +64,12 @@ public class HomeListBean implements Parcelable{
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public String toString() {
+        return "HomeListBean{" +
+                "pageSize=" + pageSize +
+                ", totalItems=" + totalItems +
+                ", totalPages=" + totalPages +
+                ", data=" + data +
+                '}';
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(pageSize);
-        dest.writeInt(totalItems);
-        dest.writeInt(totalPages);
-    }
-
 }

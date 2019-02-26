@@ -66,10 +66,10 @@ public abstract class BaseFragment<P extends BasePresenter> extends RxFragment i
 
     @Override public void onDestroyView() {
         dismissCustomDialog();
-        RefWatcher refWatcher = CoreApplication.getRefWatcher();
-        if (refWatcher != null) {
-            refWatcher.watch(this);
-        }
+//        RefWatcher refWatcher = CoreApplication.getRefWatcher();
+//        if (refWatcher != null) {
+//            refWatcher.watch(this);
+//        }
         if (mPresenter != null) {
             mPresenter.detachView();
         }

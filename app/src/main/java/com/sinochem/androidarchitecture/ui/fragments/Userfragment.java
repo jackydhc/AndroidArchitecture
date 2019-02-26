@@ -1,10 +1,6 @@
 package com.sinochem.androidarchitecture.ui.fragments;
 
-import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -13,7 +9,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.sinochem.androidarchitecture.R;
 import com.sinochem.androidarchitecture.present.UserPresent;
 import com.sinochem.corelibrary.fragments.BaseFragment;
-import com.sinochem.corelibrary.utils.rx.TransFormUtils;
 
 import java.util.concurrent.TimeUnit;
 

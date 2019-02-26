@@ -12,6 +12,14 @@ import com.sinochem.multistateview.MultiStateView;
 public abstract class BaseMultiFragment<P extends BasePresenter<? extends IMultiView>> extends LazyFragment<P> implements IMultiView{
 
     public MultiStateView multiStateView;
+    public abstract MultiStateView proovideMultiView();
+    public abstract MultiStateView.RetryListener provideRetryListener();
+    @Override
+    protected void initOnCreateView() {
+        multiStateView = proovideMultiView();
+        MultiStateView.RetryListener retryListener = provideRetryListener();
+        if (retryListener != null) multiStateView.addRetryListener(retryListener);
+    }
 
     @Override
     public void onPause() {

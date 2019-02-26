@@ -1,20 +1,17 @@
 package com.sinochem.androidarchitecture.ui.fragments;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.sinochem.androidarchitecture.R;
 import com.sinochem.androidarchitecture.present.ZPPresenter;
 import com.sinochem.corelibrary.fragments.BaseMultiFragment;
+import com.sinochem.multistateview.MultiStateView;
 
 /**
  * @author jackydu
  * @date 2019/2/18
  */
-public class ZhaopingFragment extends BaseMultiFragment<ZPPresenter> {
+public class ZhaopingFragment extends BaseMultiFragment<ZPPresenter> implements MultiStateView.RetryListener {
 
     @Override
     public int provideLayoutId() {
@@ -22,8 +19,18 @@ public class ZhaopingFragment extends BaseMultiFragment<ZPPresenter> {
     }
 
     @Override
+    public MultiStateView proovideMultiView() {
+        return container.findViewById(R.id.multi_state);
+    }
+
+    @Override
+    public MultiStateView.RetryListener provideRetryListener() {
+        return this;
+    }
+
+    @Override
     protected void initOnCreateView() {
-        multiStateView = container.findViewById(R.id.multi_state);
+
         LogUtils.d("multistate",multiStateView);
     }
 
@@ -45,6 +52,11 @@ public class ZhaopingFragment extends BaseMultiFragment<ZPPresenter> {
     @Override
     protected void loadData() {
         LogUtils.d("multistate","loadData");
+        mPresenter.start();
+    }
+
+    @Override
+    public void onRetry() {
         mPresenter.start();
     }
 }

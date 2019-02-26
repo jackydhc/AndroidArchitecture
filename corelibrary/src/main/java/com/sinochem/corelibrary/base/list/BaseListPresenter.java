@@ -28,6 +28,7 @@ public abstract class BaseListPresenter<E,T> extends BaseListContract.IRefreshPr
 
     @Override
     public void onLoadMoreRequested() {
+        LogUtils.d("baselist","onloadResquest");
         loadData(false);
     }
 
@@ -38,7 +39,7 @@ public abstract class BaseListPresenter<E,T> extends BaseListContract.IRefreshPr
 
     @Override
     public void start() {
-
+        loadData(true);
     }
 
     protected void loadData(boolean isRefresh){
@@ -64,12 +65,12 @@ public abstract class BaseListPresenter<E,T> extends BaseListContract.IRefreshPr
                     @Override
                     protected void doError(Throwable throwable) {
                         isLoading = false;
+                        getMvpView().showError(throwable.getMessage());
                         LogUtils.d(BaseListPresenter.class.getSimpleName(),throwable.getMessage());
                     }
                 });
 
         addSubscription(subscribe);
-
     }
 
     protected abstract Observable<ApiResponse<E>> provideObservable(boolean isRefresh);

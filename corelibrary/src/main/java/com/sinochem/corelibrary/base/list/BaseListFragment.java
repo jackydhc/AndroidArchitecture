@@ -3,10 +3,12 @@ package com.sinochem.corelibrary.base.list;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.sinochem.corelibrary.R;
 import com.sinochem.corelibrary.fragments.BaseMultiFragment;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -39,13 +41,14 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
 
     @Override
     protected void initOnCreateView() {
+        super.initOnCreateView();
         recycler = provideRecyclerView();
         if (recycler == null) throw new IllegalArgumentException("recycler is null");
         recycler.setLayoutManager(provideLayoutManager() == null ? new LinearLayoutManager(mContext) :provideLayoutManager());
         mAdapter = provideAdapter();
         recycler.setAdapter(mAdapter);
         recycler.addItemDecoration(getDefaultItemDecoration());
-        if (mAdapter.isLoadMoreEnable() ) mAdapter.setOnLoadMoreListener(mPresenter,recycler);
+        if (mAdapter.isLoadMoreEnable()) mAdapter.setOnLoadMoreListener(mPresenter,recycler);
         refreshLayout = provideRefreshLayout();
         if (refreshLayout != null) {
             refreshLayout.setOnRefreshListener(mPresenter);
@@ -78,6 +81,7 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
     @Override
     public void showError(String error) {
         super.showError(error);
+        LogUtils.d("BASELIST:","showError:");
         if (mAdapter == null) {
             return;
         }
@@ -87,12 +91,15 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
 
     @Override
     public void showComplete() {
+        LogUtils.d("BASELIST:","showComplete:");
         mAdapter.loadMoreComplete();
     }
 
     @Override
     public void showContent(List<E> data, boolean refresh) {
         showContent();
+        if (!refresh )  refreshLayout.finishLoadmore();
+        LogUtils.d("BASELIST:","showContent:"+data.size());
         if (refresh) {
             mAdapter.setNewData(data);
         } else {

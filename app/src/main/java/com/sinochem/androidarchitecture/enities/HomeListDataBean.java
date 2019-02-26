@@ -1,10 +1,12 @@
 package com.sinochem.androidarchitecture.enities;
 
+import java.io.Serializable;
+
 /**
  * @author jackydu
  * @date 2019/2/13
  */
-public class HomeListDataBean {
+public class HomeListDataBean implements Serializable {
 
     /**
      * summary : 比特币官方论坛Bitcoin.org持有人眼镜蛇Cobra在推特上表示，BTC不需要更多的分叉来减少区块块的大小，任何区块大小的改变都会分裂社区。
@@ -108,5 +110,21 @@ public class HomeListDataBean {
 
     public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
+    }
+
+    @Override
+    public String toString() {
+        return "HomeListDataBean{" +
+                "summary='" + summary + '\'' +
+                ", id=" + id +
+                ", title='" + title + '\'' +
+                ", summaryAuto='" + summaryAuto + '\'' +
+                ", url='" + url + '\'' +
+                ", mobileUrl='" + mobileUrl + '\'' +
+                ", siteName='" + siteName + '\'' +
+                ", language='" + language + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", publishDate='" + publishDate + '\'' +
+                '}';
     }
 }

@@ -80,10 +80,11 @@ public class MainActivity extends BaseActivity {
             case R.id.rb_mine:
                 if (lastIndex == 1)return;
                 lastIndex = 1;
-                Fragment user = fm.findFragmentByTag(ZhaopingFragment.class.getSimpleName());
+                Fragment user = fm.findFragmentByTag(HomeListFragment.class.getSimpleName());
                 LogUtils.d("Userfragment",user);
-                if (user == null) user = new ZhaopingFragment();
-                setTab(fragmentTransaction,user, ZhaopingFragment.class.getSimpleName());
+                if (user == null) user = HomeListFragment.newInstance("news");
+//                if (user == null) user = new ZhaopingFragment();
+                setTab(fragmentTransaction,user, HomeListFragment.class.getSimpleName());
                 break;
         }
     }

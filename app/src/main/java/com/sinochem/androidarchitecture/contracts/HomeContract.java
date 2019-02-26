@@ -1,5 +1,6 @@
 package com.sinochem.androidarchitecture.contracts;
 
+import com.sinochem.corelibrary.mvp.MvpView;
 import com.sinochem.corelibrary.mvp.multiState.IMultiView;
 
 /**
@@ -8,7 +9,7 @@ import com.sinochem.corelibrary.mvp.multiState.IMultiView;
  */
 public interface HomeContract {
 
-    interface IView extends IMultiView{
+    interface IView extends MvpView{
         void showAD();
         void showMenu();
     }
