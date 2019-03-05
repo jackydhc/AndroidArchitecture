@@ -31,5 +31,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':corelibrary')
     annotationProcessor rootProject.ext.majorFrame.aptButterKnifeCompiler
+    implementation project(':components:jsbridge')
 
 }

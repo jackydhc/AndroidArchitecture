@@ -42,7 +42,7 @@ ext {
 
     androidVersionConfig = [
 
-            androidMinSdkVersion    : 17,
+            androidMinSdkVersion    : 21,
             androidTargetSdkVersion : 27,
             androidCompileSdkVersion: 27,
     ]

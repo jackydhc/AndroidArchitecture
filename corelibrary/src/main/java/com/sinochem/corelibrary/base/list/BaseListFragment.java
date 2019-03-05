@@ -38,6 +38,7 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
     protected abstract RecyclerView provideRecyclerView();
     protected abstract RecyclerView.LayoutManager provideLayoutManager();
     protected abstract SmartRefreshLayout provideRefreshLayout();
+    public boolean isFirstLoading = true;
 
     @Override
     protected void initOnCreateView() {
@@ -100,7 +101,9 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
 
     @Override
     public void showContent(List<E> data, boolean refresh) {
+        isFirstLoading = false;
         showContent();
+
         if (!refresh )  refreshLayout.finishLoadmore();
         else  refreshLayout.finishRefresh();
         LogUtils.d("BASELIST:","showContent:"+data.size());
@@ -119,6 +122,6 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
 
     @Override
     public void showLoading(boolean show) {
-        if (show) showLoading();
+        if (isFirstLoading) showLoading();
     }
 }

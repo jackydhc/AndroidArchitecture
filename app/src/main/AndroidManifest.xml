@@ -14,8 +14,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
             android:configChanges="keyboardHidden|screenSize"
-            android:launchMode="singleTask"
-            android:theme="@style/Transparent" >
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
 
         </activity>
         <activity
@@ -26,6 +26,11 @@
         <activity
             android:name="com.sinochem.corelibrary.base.ContainerToolbarActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent" />
+        <activity
+            android:name=".ui.WebDetailAct"
+            android:configChanges="keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent" />
         <activity android:name=".ui.WelcomeActivity">

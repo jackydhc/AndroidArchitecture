@@ -37,12 +37,14 @@ public abstract class BaseFragment<P extends BasePresenter> extends RxFragment i
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (this.container == null) this.container = inflater.inflate(provideLayoutId(), container, false);
-        ButterKnife.bind(this, this.container);
-        initOnCreateView();
-        mPresenter = providePresent();
-        if (mPresenter != null) {
-            mPresenter.attachView(this);
+        if (this.container == null) {
+            this.container = inflater.inflate(provideLayoutId(), container, false);
+            ButterKnife.bind(this, this.container);
+            initOnCreateView();
+            mPresenter = providePresent();
+            if (mPresenter != null) {
+                mPresenter.attachView(this);
+            }
         }
         return this.container;
     }

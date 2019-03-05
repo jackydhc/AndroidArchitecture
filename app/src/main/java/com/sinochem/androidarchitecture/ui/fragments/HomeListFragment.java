@@ -16,6 +16,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.sinochem.androidarchitecture.R;
 import com.sinochem.androidarchitecture.enities.HomeListDataBean;
 import com.sinochem.androidarchitecture.present.HomeListPresent;
+import com.sinochem.androidarchitecture.ui.WebDetailAct;
 import com.sinochem.corelibrary.base.list.BaseListFragment;
 import com.sinochem.multistateview.MultiStateView;
 
@@ -24,7 +25,7 @@ import com.sinochem.multistateview.MultiStateView;
  * @author jackydu
  * @date 2019/2/1
  */
-public class HomeListFragment extends BaseListFragment<HomeListDataBean, HomeListPresent> implements BaseQuickAdapter.OnItemChildClickListener, MultiStateView.RetryListener, OnLoadmoreListener {
+public class HomeListFragment extends BaseListFragment<HomeListDataBean, HomeListPresent> implements BaseQuickAdapter.OnItemChildClickListener, MultiStateView.RetryListener, OnLoadmoreListener, BaseQuickAdapter.OnItemClickListener {
 
     public static HomeListFragment newInstance(String type){
         Bundle args = new Bundle();
@@ -48,7 +49,9 @@ public class HomeListFragment extends BaseListFragment<HomeListDataBean, HomeLis
             }
         };
         baseQuickAdapter.setOnItemChildClickListener(HomeListFragment.this);
+        baseQuickAdapter.setOnItemClickListener(HomeListFragment.this);
         baseQuickAdapter.setEnableLoadMore(true);
+
         return baseQuickAdapter;
     }
 
@@ -108,7 +111,7 @@ public class HomeListFragment extends BaseListFragment<HomeListDataBean, HomeLis
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         HomeListDataBean dataBean = (HomeListDataBean) adapter.getData().get(position);
-
+        WebDetailAct.toWebDetail(dataBean.getMobileUrl(),dataBean.getTitle(),mContext);
     }
 
     @Override
@@ -120,5 +123,11 @@ public class HomeListFragment extends BaseListFragment<HomeListDataBean, HomeLis
     public void onLoadmore(RefreshLayout refreshlayout) {
         LogUtils.d("list","onloadmore");
         mPresenter.loadData(false);
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        HomeListDataBean dataBean = (HomeListDataBean) adapter.getData().get(position);
+        WebDetailAct.toWebDetail(dataBean.getMobileUrl(),dataBean.getTitle(),mContext);
     }
 }

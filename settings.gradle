@@ -1,1 +1,1 @@
-include ':app', ':corelibrary', ':components:multistateview', ':jsbridge'
+include ':app', ':corelibrary', ':components:multistateview', ':components:jsbridge'

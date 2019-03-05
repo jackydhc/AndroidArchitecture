@@ -130,4 +130,5 @@ dependencies {
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
     api 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+
 }
