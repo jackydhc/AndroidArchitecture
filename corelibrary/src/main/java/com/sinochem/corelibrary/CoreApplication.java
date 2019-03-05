@@ -54,4 +54,8 @@ public abstract class CoreApplication extends MultiDexApplication implements App
         }
         return globalConfig;
     }
+
+    public static void exit(){
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
 }

@@ -15,39 +15,38 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.sinochem.androidarchitecture.R;
 import com.sinochem.androidarchitecture.enities.HomeListDataBean;
+import com.sinochem.androidarchitecture.enities.JobsBean;
 import com.sinochem.androidarchitecture.present.HomeListPresent;
+import com.sinochem.androidarchitecture.present.JobsListPresent;
 import com.sinochem.corelibrary.base.list.BaseListFragment;
 import com.sinochem.multistateview.MultiStateView;
 
-
 /**
  * @author jackydu
- * @date 2019/2/1
+ * @date 2019/3/4
  */
-public class HomeListFragment extends BaseListFragment<HomeListDataBean, HomeListPresent> implements BaseQuickAdapter.OnItemChildClickListener, MultiStateView.RetryListener, OnLoadmoreListener {
+public class HomeJobsFragment extends BaseListFragment<JobsBean,JobsListPresent> implements BaseQuickAdapter.OnItemChildClickListener, MultiStateView.RetryListener, OnLoadmoreListener {
 
-    public static HomeListFragment newInstance(String type){
+    public static HomeJobsFragment newInstance(String type){
         Bundle args = new Bundle();
         args.putString("type",type);
-        HomeListFragment homeListFragment = new HomeListFragment();
+        HomeJobsFragment homeListFragment = new HomeJobsFragment();
         homeListFragment.setArguments(args);
         return homeListFragment;
     }
     @SuppressLint("ValidFragment")
-    private HomeListFragment(){}
+    private HomeJobsFragment(){}
 
     @Override
-    protected BaseQuickAdapter<HomeListDataBean, ? extends BaseViewHolder> provideAdapter() {
-        BaseQuickAdapter<HomeListDataBean, BaseViewHolder> baseQuickAdapter = new BaseQuickAdapter<HomeListDataBean, BaseViewHolder>(R.layout.layout_home_list_item) {
+    protected BaseQuickAdapter<JobsBean, ? extends BaseViewHolder> provideAdapter() {
+        BaseQuickAdapter<JobsBean, BaseViewHolder> baseQuickAdapter = new BaseQuickAdapter<JobsBean, BaseViewHolder>(R.layout.layout_home_list_item) {
             @Override
-            protected void convert(BaseViewHolder helper, HomeListDataBean item) {
+            protected void convert(BaseViewHolder helper, JobsBean item) {
                 TextView txtTitle = helper.itemView.findViewById(R.id.tv_item_title);
-                txtTitle.setText(item.getTitle());
-                helper.setText(R.id.txt_content,item.getSummary());
                 helper.setText(R.id.tv_time,item.getPublishDate());
             }
         };
-        baseQuickAdapter.setOnItemChildClickListener(HomeListFragment.this);
+        baseQuickAdapter.setOnItemChildClickListener(HomeJobsFragment.this);
         baseQuickAdapter.setEnableLoadMore(true);
         return baseQuickAdapter;
     }
@@ -68,13 +67,13 @@ public class HomeListFragment extends BaseListFragment<HomeListDataBean, HomeLis
     }
 
     @Override
-    protected HomeListPresent providePresent() {
+    protected JobsListPresent providePresent() {
         String type="";
         Bundle arguments = getArguments();
         if (arguments != null){
             type = arguments.getString("type");
         }
-        return new HomeListPresent(type);
+        return new JobsListPresent();
     }
 
     @Override

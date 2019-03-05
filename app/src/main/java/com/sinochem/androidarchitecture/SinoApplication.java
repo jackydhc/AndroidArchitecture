@@ -25,4 +25,5 @@ public class SinoApplication extends CoreApplication {
         LogUtils.d(SinoApplication.class.getSimpleName(),builder.toString());
         return builder.toString();
     }
+
 }

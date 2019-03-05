@@ -8,24 +8,23 @@ import android.support.v4.util.LruCache;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+
+import com.blankj.utilcode.util.LogUtils;
 
 /**
  * @author jackydu
  * @date 2019/2/19
  */
 public abstract class BaseFragmentPagerAdapter extends PagerAdapter{
-    /** The default size of {@link #mFragmentCache} */
-    private static final int DEFAULT_CACHE_SIZE = 5;
     private static final String TAG = "FragmentPagerAdapter";
     private static final boolean DEBUG = false;
 
     private final FragmentManager mFragmentManager;
     private FragmentTransaction mCurTransaction = null;
     private Fragment mCurrentPrimaryItem = null;
-    /** A cache to store detached fragments before they are removed  */
-    private LruCache<String, Fragment> mFragmentCache = new FragmentCache(DEFAULT_CACHE_SIZE);
 
-    public BaseFragmentPagerAdapter(android.support.v4.app.FragmentManager fm) {
+    public BaseFragmentPagerAdapter(FragmentManager fm) {
         mFragmentManager = fm;
     }
 
@@ -34,129 +33,115 @@ public abstract class BaseFragmentPagerAdapter extends PagerAdapter{
      */
     public abstract Fragment getItem(int position);
 
-    @Override
-    public void startUpdate(View container) {
+    @Override public void startUpdate(ViewGroup container) {
+        if (container.getId() == View.NO_ID) {
+            throw new IllegalStateException("ViewPager with adapter " + this + " requires a view id");
+        }
     }
 
-    @Override
-    public Object instantiateItem(View container, int position) {
+    @Override public Object instantiateItem(ViewGroup container, int position) {
         if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }
 
+        final String itemId = getItemTag(position);
+
         // Do we already have this fragment?
-        String name = makeFragmentName(container.getId(), position);
-
-        // Remove item from the cache
-        mFragmentCache.remove(name);
-
+        String name = makeFragmentName(container.getId(), itemId);
         Fragment fragment = mFragmentManager.findFragmentByTag(name);
+        LogUtils.d(TAG,itemId+":findFragmentByTag:"+fragment);
+
         if (fragment != null) {
-            if (DEBUG) Log.v(TAG, "Attaching item #" + position + ": f=" + fragment);
+            //LogUtil.d("pagerAdapter: " + name + ", " + fragment.getTag());
             mCurTransaction.attach(fragment);
         } else {
             fragment = getItem(position);
-            if(fragment == null) {
-                if (DEBUG) Log.e(TAG, "NPE workaround for getItem(). See b/7103023");
-                return null;
-            }
-            if (DEBUG) Log.v(TAG, "Adding item #" + position + ": f=" + fragment);
-            mCurTransaction.add(container.getId(), fragment,
-                    makeFragmentName(container.getId(), position));
+            mCurTransaction.add(container.getId(), fragment, makeFragmentName(container.getId(), itemId));
         }
+
         if (fragment != mCurrentPrimaryItem) {
             fragment.setMenuVisibility(false);
+            fragment.setUserVisibleHint(false);
         }
 
         return fragment;
     }
 
-    @Override
-    public void destroyItem(View container, int position, Object object) {
+    private boolean isDistoryAll = false;
+
+    public void setDistoryAll(boolean distoryAll) {
+        isDistoryAll = distoryAll;
+    }
+
+    @Override public void destroyItem(ViewGroup container, int position, Object object) {
         if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }
-        if (DEBUG) Log.v(TAG, "Detaching item #" + position + ": f=" + object
-                + " v=" + ((Fragment)object).getView());
 
         Fragment fragment = (Fragment) object;
-        String name = fragment.getTag();
-        if (name == null) {
-            // We prefer to get the name directly from the fragment, but, if the fragment is
-            // detached before the add transaction is committed, this could be 'null'. In
-            // that case, generate a name so we can still cache the fragment.
-            name = makeFragmentName(container.getId(), position);
+        if (isDistoryAll) {
+            mCurTransaction.detach((Fragment) object);
+            return;
         }
 
-        mFragmentCache.put(name, fragment);
-        mCurTransaction.detach(fragment);
+        if (fragment != mCurrentPrimaryItem) {
+            mCurTransaction.detach((Fragment) object);
+            //LogUtil.d("destroyItem: " + ((MyFragment) object).mKey + ", " + position);
+        }
     }
 
-    @Override
-    public void setPrimaryItem(View container, int position, Object object) {
+    @Override public void setPrimaryItem(ViewGroup container, int position, Object object) {
         Fragment fragment = (Fragment) object;
+        //mCurrentPrimaryItem = getItem(position);
         if (fragment != mCurrentPrimaryItem) {
             if (mCurrentPrimaryItem != null) {
                 mCurrentPrimaryItem.setMenuVisibility(false);
+                mCurrentPrimaryItem.setUserVisibleHint(false);
             }
             if (fragment != null) {
                 fragment.setMenuVisibility(true);
+                fragment.setUserVisibleHint(true);
             }
             mCurrentPrimaryItem = fragment;
         }
-
     }
 
-    @Override
-    public void finishUpdate(View container) {
-        if (mCurTransaction != null && !mFragmentManager.isDestroyed()) {
-            mCurTransaction.commitAllowingStateLoss();
+    @Override public void finishUpdate(ViewGroup container) {
+        if (mCurTransaction != null) {
+            mCurTransaction.commitNowAllowingStateLoss();
             mCurTransaction = null;
-            mFragmentManager.executePendingTransactions();
         }
     }
 
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        // Ascend the tree to determine if the container is a child of the fragment
-        View root = ((Fragment) object).getView();
-        for (Object v = view; v instanceof View; v = ((View) v).getParent()) {
-            if (v == root) {
-                return true;
-            }
-        }
-        return false;
+    @Override public boolean isViewFromObject(View view, Object object) {
+        return ((Fragment) object).getView() == view;
     }
 
-    @Override
-    public Parcelable saveState() {
+    @Override public Parcelable saveState() {
         return null;
     }
 
-    @Override
-    public void restoreState(Parcelable state, ClassLoader loader) {
-    }
-
-    /** Creates a name for the fragment */
-    protected String makeFragmentName(int viewId, int index) {
-        return "android:switcher:" + viewId + ":" + index;
+    @Override public void restoreState(Parcelable state, ClassLoader loader) {
     }
 
     /**
-     * A cache of detached fragments.
+     * Return a unique identifier for the item at the given position.
+     *
+     * <p>The default implementation returns the given position.
+     * Subclasses should override this method if the positions of items can change.</p>
+     *
+     * @param position Position within this adapter
+     * @return Unique identifier for the item at position
      */
-    private class FragmentCache extends LruCache<String, Fragment> {
-        public FragmentCache(int size) {
-            super(size);
-        }
+    public String getItemTag(int position) {
+        return String.valueOf(position);
+    }
 
-        @Override
-        protected void entryRemoved(boolean evicted, String key,
-                                    Fragment oldValue, Fragment newValue) {
-            // remove the fragment if it's evicted OR it's replaced by a new fragment
-            if (evicted || (newValue != null && oldValue != newValue)) {
-                mCurTransaction.remove(oldValue);
-            }
-        }
+    private static String makeFragmentName(int viewId, String id) {
+        return "android:switcher:" + viewId + ":" + id;
+    }
+
+    public Fragment getCurrentPrimaryItem() {
+        return mCurrentPrimaryItem;
     }
 }

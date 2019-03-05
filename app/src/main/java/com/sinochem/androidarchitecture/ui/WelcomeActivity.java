@@ -60,6 +60,7 @@ public class WelcomeActivity extends BaseActivity {
         countDownEnd = Flowable.intervalRange(0, 300, 0, 10, TimeUnit.MILLISECONDS)
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                 .compose(bindToLifecycle())
+                .take(300)
                 .doOnNext(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {

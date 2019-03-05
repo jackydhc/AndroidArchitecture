@@ -18,13 +18,13 @@ import okhttp3.Response;
 public class CachedControlInterceptor implements Interceptor {
     @Override public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        if (!NetworkUtils.isAvailableByPing()) {
+        if (!NetworkUtils.isConnected()) {
             request = request.newBuilder()
                     .cacheControl(CacheControl.FORCE_CACHE)
                     .build();
         }
         Response response = chain.proceed(request);
-        if (NetworkUtils.isAvailableByPing()) {
+        if (NetworkUtils.isConnected()) {
             int maxAge = request.cacheControl().maxAgeSeconds();//有网缓存时长
             if(maxAge > 1){
                 //LogUtil.d("maxAge: "+maxAge);

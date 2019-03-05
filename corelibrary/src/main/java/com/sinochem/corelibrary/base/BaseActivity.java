@@ -4,13 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -18,7 +23,6 @@ import android.widget.TextView;
 import com.sinochem.corelibrary.BuildConfig;
 import com.sinochem.corelibrary.R;
 import com.sinochem.corelibrary.mvp.MvpView;
-import com.sinochem.corelibrary.utils.ActivityManager;
 import com.sinochem.corelibrary.utils.UIUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
@@ -79,6 +83,12 @@ public abstract class BaseActivity extends RxAppCompatActivity implements MvpVie
             return;
         }
         setContentView(id);
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(Color.parseColor("#2c3945"));
+        }
         ButterKnife.bind(this);
         mToolbar = findViewById(R.id.toolbar);
         if (mToolbar != null) {
@@ -95,8 +105,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements MvpVie
         initOnCreate(savedInstanceState);
 //        EventBus.getDefault()
 //                .register(this);
-        ActivityManager.get()
-                .add(this);
+//        ActivityManager.get()
+//                .add(this);
     }
 
     @Override public void onConfigurationChanged(Configuration newConfig) {
@@ -105,7 +115,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements MvpVie
 
     protected void initActionBar(ActionBar actionBar) {
     }
-    public abstract int provideLayoutId();
+    public abstract @LayoutRes int provideLayoutId();
 
     protected abstract void initOnCreate(Bundle savedInstanceState);
 
@@ -131,8 +141,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements MvpVie
         fixInputMethodManagerLeak(this);
 //        EventBus.getDefault()
 //                .unregister(this);
-        ActivityManager.get()
-                .remove(this);
+//        ActivityManager.get()
+//                .remove(this);
         // Unbind from the service
         dismissCustomDialog();
         super.onDestroy();
@@ -215,11 +225,11 @@ public abstract class BaseActivity extends RxAppCompatActivity implements MvpVie
 
     @Override public void finish() {
         super.finish();
-        Intent intent = getIntent();
-        if (intent != null) {
-            if (intent.getBooleanExtra(EXTRA_START_MAIN, false)) {
-//                MainActivity.startToMain(this);
-            }
-        }
+//        Intent intent = getIntent();
+//        if (intent != null) {
+//            if (intent.getBooleanExtra(EXTRA_START_MAIN, false)) {
+////                MainActivity.startToMain(this);
+//            }
+//        }
     }
 }

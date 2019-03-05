@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sinochem.corelibrary.CoreApplication;
 import com.sinochem.corelibrary.mvp.BasePresenter;
 import com.sinochem.corelibrary.mvp.MvpView;
-import com.squareup.leakcanary.RefWatcher;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.ButterKnife;
@@ -39,7 +37,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends RxFragment i
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         if (this.container == null) this.container = inflater.inflate(provideLayoutId(), container, false);
         ButterKnife.bind(this, this.container);
         initOnCreateView();

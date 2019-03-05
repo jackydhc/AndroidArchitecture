@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.text.LoginFilter;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -13,15 +12,11 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.sinochem.androidarchitecture.ui.fragments.HomeFragment;
-import com.sinochem.androidarchitecture.ui.fragments.HomeListFragment;
 import com.sinochem.androidarchitecture.ui.fragments.Userfragment;
-import com.sinochem.androidarchitecture.ui.fragments.ZhaopingFragment;
 import com.sinochem.corelibrary.base.BaseActivity;
-import com.squareup.haha.perflib.Main;
-import com.trello.rxlifecycle2.components.support.RxFragment;
+
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -50,9 +45,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initOnCreate(Bundle savedInstanceState) {
         if (fm == null) fm = getSupportFragmentManager();
-        Fragment home = fm.getFragment(new Bundle(), "home");
+        Fragment home = fm.getFragment(new Bundle(), HomeFragment.class.getSimpleName());
         if (home == null) home = new HomeFragment();
-        fm.beginTransaction().add(R.id.container,home,"home").commit();
+        fm.beginTransaction().add(R.id.container,home,HomeFragment.class.getSimpleName()).commit();
         lastFragment = home;
     }
 
@@ -72,7 +67,7 @@ public class MainActivity extends BaseActivity {
             case R.id.rb_home:
                if (lastIndex == 0)return;
                lastIndex = 0;
-                Fragment home = fm.findFragmentByTag( HomeFragment.class.getSimpleName());
+                Fragment home = fm.findFragmentByTag(HomeFragment.class.getSimpleName());
                 LogUtils.d("Userfragment",home);
                 if (home == null) home = new HomeFragment();
                 setTab(fragmentTransaction,home,HomeFragment.class.getSimpleName());
@@ -80,11 +75,10 @@ public class MainActivity extends BaseActivity {
             case R.id.rb_mine:
                 if (lastIndex == 1)return;
                 lastIndex = 1;
-                Fragment user = fm.findFragmentByTag(HomeListFragment.class.getSimpleName());
+                Fragment user = fm.findFragmentByTag(Userfragment.class.getSimpleName());
                 LogUtils.d("Userfragment",user);
-                if (user == null) user = HomeListFragment.newInstance("news");
-//                if (user == null) user = new ZhaopingFragment();
-                setTab(fragmentTransaction,user, HomeListFragment.class.getSimpleName());
+                if (user == null) user = new Userfragment();
+                setTab(fragmentTransaction,user, Userfragment.class.getSimpleName());
                 break;
         }
     }
@@ -96,6 +90,14 @@ public class MainActivity extends BaseActivity {
         if (fragment.isAdded()) transaction.show(fragment);
         else transaction.add(R.id.container,fragment,tag);
         transaction.commit();
+        LogUtils.d("mainactivity","setTab:"+fm.getFragments().size());
         lastFragment = fragment;
+    }
+
+    @Override
+    public void onBackPressed() {
+        LogUtils.d("mainactivity","onBackPressed  size:"+fm.getFragments().size());
+        finish();
+//        super.onBackPressed();
     }
 }

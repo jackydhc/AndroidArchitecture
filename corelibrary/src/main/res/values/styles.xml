@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="BottomDialog" parent="AlertDialogStyle">
+        <item name="android:windowAnimationStyle">@style/bottom_in_out_animation</item>
+    </style>
+
+    <style name="bottom_in_out_animation" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/bottom_in_300</item>
+        <item name="android:windowExitAnimation">@anim/bottom_out_300</item>
+    </style>
+
+    <style name="fade_in_out_animation" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/alpha_to_one_bubble</item>
+        <item name="android:windowExitAnimation">@anim/alpha_to_zero_bubble</item>
+    </style>
+</resources>

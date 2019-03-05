@@ -9,19 +9,18 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.BundleCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.sinochem.androidarchitecture.R;
 import com.sinochem.androidarchitecture.contracts.HomeContract;
+import com.sinochem.androidarchitecture.enities.TitleBean;
 import com.sinochem.androidarchitecture.present.HomePresent;
 import com.sinochem.corelibrary.fragments.BaseFragmentPagerAdapter;
-import com.sinochem.corelibrary.fragments.BaseMultiFragment;
 import com.sinochem.corelibrary.fragments.LazyFragment;
-import com.sinochem.multistateview.MultiStateView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -48,6 +47,7 @@ public class HomeFragment extends LazyFragment<HomePresent> implements HomeContr
 
     @Override
     protected void initOnCreateView() {
+        LogUtils.d("HomeFragment","initOnCreateView");
         viewPager.setAdapter(new HomeAdapter(getChildFragmentManager(),getContext()));
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -79,41 +79,67 @@ public class HomeFragment extends LazyFragment<HomePresent> implements HomeContr
 
     private class HomeAdapter extends BaseFragmentPagerAdapter {
 
-        String[] titles = new String[]{"hello","android","ios","html"};
+        List<TitleBean> titles = new ArrayList<>();
         private Context mContext;
         private FragmentManager fm;
         public HomeAdapter(FragmentManager fm, Context context) {
             super(fm);
             this.mContext = context;
             this.fm = fm;
+            initTitle();
+        }
+        //value :blockchain(区块链资讯)；topics(热门话题);news（科技动态）;technews(开发者资讯);jobs(招聘行情)
+        private void initTitle(){
+            if (titles.size() == 0){
+                titles.add(new TitleBean("热门话题",TitleBean.TYPE_TOPIC));
+                titles.add(new TitleBean("科技动态",TitleBean.TYPE_NEWS));
+                titles.add(new TitleBean("区块链资讯",TitleBean.TYPE_BLOCKCHAIN));
+                titles.add(new TitleBean("开发者资讯",TitleBean.TYPE_TECHNEWS));
+                titles.add(new TitleBean("招聘行情",TitleBean.TYPE_JOBS));
+            }
         }
 
 
         @Override
         public int getCount() {
-            return titles.length;
+            return titles.size();
         }
 //
         @Override
         public Fragment getItem(int position) {
-            Bundle bundle = new Bundle();
-            bundle.putString("type",titles[position]);
+            String type = titles.get(position).type;
             LogUtils.d("homeFragment","getItem:"+position);
-            switch (titles[position]){
-                case "android":
-                    return Fragment.instantiate(mContext,Userfragment.class.getName(),bundle);
-                case "ios":
-                    return Fragment.instantiate(mContext,Userfragment.class.getName(),bundle);
-                    default:
-                        return Fragment.instantiate(mContext,Userfragment.class.getName(),bundle);
+            Fragment fragment = null;
+            switch (type){
+                case TitleBean.TYPE_BLOCKCHAIN:
+                case TitleBean.TYPE_NEWS:
+                case TitleBean.TYPE_TECHNEWS:
+                    fragment =  HomeListFragment.newInstance(type);
+                    break;
+                case TitleBean.TYPE_TOPIC:
+                    fragment = HomeTopicFragment.newInstance(type);
+                    break;
+                case TitleBean.TYPE_JOBS:
+                    fragment = HomeJobsFragment.newInstance(type);
+                    break;
+                default:fragment = HomeListFragment.newInstance(type);
+                break;
+
             }
+            return fragment;
+        }
+
+
+        @Override
+        public String getItemTag(int position) {
+            return titles.get(position).type;
         }
 
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
 
-            return titles[position];
+            return titles.get(position).title;
 
         }
 

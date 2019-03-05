@@ -10,7 +10,7 @@ import java.util.List;
  * @author jackydu
  * @date 2019/2/1
  */
-public class HomeListBean implements Serializable {
+public class HomeListBean<T> implements Serializable {
 
 
     /**
@@ -23,7 +23,7 @@ public class HomeListBean implements Serializable {
     private int pageSize;
     private int totalItems;
     private int totalPages;
-    private List<HomeListDataBean> data;
+    private List<T> data;
 
     protected HomeListBean(Parcel in) {
         pageSize = in.readInt();
@@ -55,11 +55,11 @@ public class HomeListBean implements Serializable {
         this.totalPages = totalPages;
     }
 
-    public List<HomeListDataBean> getData() {
+    public List<T> getData() {
         return data;
     }
 
-    public void setData(List<HomeListDataBean> data) {
+    public void setData(List<T> data) {
         this.data = data;
     }
 

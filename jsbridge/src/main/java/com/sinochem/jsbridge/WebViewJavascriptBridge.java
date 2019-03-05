@@ -12,4 +12,5 @@ public interface WebViewJavascriptBridge {
     public void send(String data, CallbackFunction responseCallback);
 
     public void setMessageHandlers(Map<String, BridgeHandler> messageHandlers);
+
 }

@@ -5,7 +5,16 @@ import android.os.Environment;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.File;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -35,6 +44,7 @@ public enum OKHttpFactory {
                 .cache(cache)
                 .addInterceptor(new CachedControlInterceptor())
                 .addNetworkInterceptor(new CachedControlInterceptor())
+                .sslSocketFactory(cretaeDefaultFactory())
                 //失败重连
                 .retryOnConnectionFailure(true)
                 //time out
@@ -53,5 +63,44 @@ public enum OKHttpFactory {
 
     public OkHttpClient getOkHttpClient() {
         return okHttpClient;
+    }
+
+    private SSLSocketFactory cretaeDefaultFactory(){
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+
+            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                if (chain == null) {
+                    throw new IllegalArgumentException("checkServerTrusted: X509Certificate array is null");
+                } else if (chain.length <= 0) {
+                    throw new IllegalArgumentException("checkServerTrusted: X509Certificate is empty");
+                } else {
+                    try {
+                        chain[0].checkValidity();
+                        if (authType == null || !authType.toUpperCase().contains("RSA")) {
+                            throw new CertificateException("checkServerTrusted: AuthType is not RSA:" + authType);
+                        }
+                    } catch (Exception e) {
+                        throw new CertificateException("Certificate not valid or trusted.");
+                    }
+                }
+            }
+        }};
+        SSLContext sslcontext = null;
+        try {
+            sslcontext = SSLContext.getInstance("TLS");
+            sslcontext.init(null, trustAllCerts, null);
+            return sslcontext.getSocketFactory();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

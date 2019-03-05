@@ -42,6 +42,7 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
     @Override
     protected void initOnCreateView() {
         super.initOnCreateView();
+        LogUtils.d("BaseListFragment","initOnCreateView");
         recycler = provideRecyclerView();
         if (recycler == null) throw new IllegalArgumentException("recycler is null");
         recycler.setLayoutManager(provideLayoutManager() == null ? new LinearLayoutManager(mContext) :provideLayoutManager());
@@ -74,6 +75,7 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
         if (mAdapter == null) {
             return;
         }
+        refreshLayout.finishRefresh();
         mAdapter.getData().clear();
         mAdapter.notifyDataSetChanged();
     }
@@ -81,10 +83,11 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
     @Override
     public void showError(String error) {
         super.showError(error);
-        LogUtils.d("BASELIST:","showError:");
+        LogUtils.d("BASELIST:","showError:"+error);
         if (mAdapter == null) {
             return;
         }
+        refreshLayout.finishRefresh();
         mAdapter.getData().clear();
         mAdapter.notifyDataSetChanged();
     }
@@ -99,6 +102,7 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
     public void showContent(List<E> data, boolean refresh) {
         showContent();
         if (!refresh )  refreshLayout.finishLoadmore();
+        else  refreshLayout.finishRefresh();
         LogUtils.d("BASELIST:","showContent:"+data.size());
         if (refresh) {
             mAdapter.setNewData(data);
