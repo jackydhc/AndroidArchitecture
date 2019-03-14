@@ -1,5 +1,8 @@
 package com.sinochem.androidarchitecture.apis;
 
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.sinochem.androidarchitecture.enities.FuzzyData;
+import com.sinochem.androidarchitecture.enities.FuzzyResult;
 import com.sinochem.androidarchitecture.enities.HomeListBean;
 import com.sinochem.androidarchitecture.enities.HomeListDataBean;
 import com.sinochem.androidarchitecture.enities.JobsBean;
@@ -11,6 +14,7 @@ import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * @author jackydu
@@ -60,4 +64,9 @@ public interface NewsApi {
                                                     @Query("lastCursor") String cursor,
                                                     @Query("pageSize") int pageSize
     );
+
+    String SearchHost = "https://tapi.ccxcredit.com/data-service/enterprise/fsearch";
+
+    @GET
+    Observable<FuzzyResult> search(@Url String url);
 }

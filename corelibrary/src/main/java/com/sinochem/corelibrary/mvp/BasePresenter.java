@@ -10,7 +10,7 @@ import io.reactivex.disposables.Disposable;
  * 所有被观测的对象，当然也可以通过被观察对象直接绑定具有主动周期属性
  * 的view（继承rxlifecycler）
  */
-public abstract class BasePresenter<V extends MvpView> implements IPresenter<V> {
+public abstract class BasePresenter<V extends MvpView> implements IPresenter<V>  {
 
     private V mMvpView;
     private CompositeDisposable mCompositeSubscription;

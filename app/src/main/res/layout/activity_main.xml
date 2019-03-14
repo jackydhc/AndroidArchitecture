@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <include layout="@layout/layout_title_bar"/>
+    <!--<include layout="@layout/layout_title_bar"/>-->
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="wrap_content"

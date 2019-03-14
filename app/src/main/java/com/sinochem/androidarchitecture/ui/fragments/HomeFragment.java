@@ -91,6 +91,7 @@ public class HomeFragment extends LazyFragment<HomePresent> implements HomeContr
         //value :blockchain(区块链资讯)；topics(热门话题);news（科技动态）;technews(开发者资讯);jobs(招聘行情)
         private void initTitle(){
             if (titles.size() == 0){
+                titles.add(new TitleBean("查询",TitleBean.TYPE_FUZZY));
                 titles.add(new TitleBean("热门话题",TitleBean.TYPE_TOPIC));
                 titles.add(new TitleBean("科技动态",TitleBean.TYPE_NEWS));
                 titles.add(new TitleBean("区块链资讯",TitleBean.TYPE_BLOCKCHAIN));
@@ -121,6 +122,9 @@ public class HomeFragment extends LazyFragment<HomePresent> implements HomeContr
                     break;
                 case TitleBean.TYPE_JOBS:
                     fragment = HomeJobsFragment.newInstance(type);
+                    break;
+                case TitleBean.TYPE_FUZZY:
+                    fragment = Fragment.instantiate(mContext,FuzzyFragment.class.getName());
                     break;
                 default:fragment = HomeListFragment.newInstance(type);
                 break;

@@ -3,6 +3,7 @@ package com.sinochem.androidarchitecture.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -107,4 +108,5 @@ public class WelcomeActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
+
 }

@@ -18,14 +18,16 @@ import com.sinochem.androidarchitecture.enities.HomeListDataBean;
 import com.sinochem.androidarchitecture.enities.TopicBean;
 import com.sinochem.androidarchitecture.present.HomeListPresent;
 import com.sinochem.androidarchitecture.present.TopicPresenter;
+import com.sinochem.androidarchitecture.ui.WebDetailAct;
 import com.sinochem.corelibrary.base.list.BaseListFragment;
 import com.sinochem.multistateview.MultiStateView;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 /**
  * @author jackydu
  * @date 2019/3/4
  */
-public class HomeTopicFragment extends BaseListFragment<TopicBean,TopicPresenter> implements BaseQuickAdapter.OnItemChildClickListener, MultiStateView.RetryListener, OnLoadmoreListener {
+public class HomeTopicFragment extends BaseListFragment<TopicBean,TopicPresenter> implements BaseQuickAdapter.OnItemChildClickListener, MultiStateView.RetryListener, OnLoadmoreListener, BaseQuickAdapter.OnItemClickListener {
 
     public static HomeTopicFragment newInstance(String type){
         Bundle args = new Bundle();
@@ -39,7 +41,7 @@ public class HomeTopicFragment extends BaseListFragment<TopicBean,TopicPresenter
 
     @Override
     protected BaseQuickAdapter<TopicBean, ? extends BaseViewHolder> provideAdapter() {
-        BaseQuickAdapter<TopicBean, BaseViewHolder> baseQuickAdapter = new BaseQuickAdapter<TopicBean, BaseViewHolder>(R.layout.layout_home_list_item) {
+        BaseQuickAdapter<TopicBean, BaseViewHolder> baseQuickAdapter = new BaseQuickAdapter<TopicBean, BaseViewHolder>(R.layout.layout_home_topic_item) {
             @Override
             protected void convert(BaseViewHolder helper, TopicBean item) {
                 TextView txtTitle = helper.itemView.findViewById(R.id.tv_item_title);
@@ -48,9 +50,17 @@ public class HomeTopicFragment extends BaseListFragment<TopicBean,TopicPresenter
                 helper.setText(R.id.tv_time,item.getPublishDate());
             }
         };
-        baseQuickAdapter.setOnItemChildClickListener(HomeTopicFragment.this);
+        baseQuickAdapter.setOnItemClickListener(HomeTopicFragment.this);
         baseQuickAdapter.setEnableLoadMore(true);
         return baseQuickAdapter;
+    }
+
+    @Override
+    protected RecyclerView.ItemDecoration getDefaultItemDecoration() {
+        return new HorizontalDividerItemDecoration.Builder(mContext)
+                .colorResId(com.sinochem.corelibrary.R.color.white)
+                .size(0)
+                .build();
     }
 
     @Override
@@ -68,9 +78,9 @@ public class HomeTopicFragment extends BaseListFragment<TopicBean,TopicPresenter
         return R.layout.layout_base_list;
     }
 
+    private String type;
     @Override
     protected TopicPresenter providePresent() {
-        String type="";
         Bundle arguments = getArguments();
         if (arguments != null){
             type = arguments.getString("type");
@@ -121,5 +131,14 @@ public class HomeTopicFragment extends BaseListFragment<TopicBean,TopicPresenter
     public void onLoadmore(RefreshLayout refreshlayout) {
         LogUtils.d("list","onloadmore");
         mPresenter.loadData(false);
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        TopicBean topicBean = (TopicBean) adapter.getData().get(position);
+        if (topicBean != null) {
+            WebDetailAct.toWebDetailWithID(String.valueOf(topicBean.getId()),type,mContext);
+        }
+
     }
 }

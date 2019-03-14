@@ -58,7 +58,7 @@ public abstract class BaseListFragment<E, P extends BaseListContract.IRefreshPre
         showLoading(true);
     }
 
-    public RecyclerView.ItemDecoration getDefaultItemDecoration() {
+    protected RecyclerView.ItemDecoration getDefaultItemDecoration() {
         return new HorizontalDividerItemDecoration.Builder(recycler.getContext())
                 .colorResId(R.color.default_divider_color)
                 .sizeResId(R.dimen.default_divider_height)

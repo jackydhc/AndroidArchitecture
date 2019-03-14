@@ -1,5 +1,7 @@
 package com.sinochem.androidarchitecture;
 
+import android.app.ActivityManager;
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,10 +24,10 @@ import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
-    @BindView(R.id.toolbar_title)
-    TextView toolbarTitle;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+//    @BindView(R.id.toolbar_title)
+//    TextView toolbarTitle;
+//    @BindView(R.id.toolbar)
+//    Toolbar toolbar;
     @BindView(R.id.container)
     FrameLayout container;
     @BindView(R.id.rb_home)

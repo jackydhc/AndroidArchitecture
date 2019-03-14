@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.util.MultiTypeDelegate;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
@@ -70,9 +72,10 @@ public class HomeListFragment extends BaseListFragment<HomeListDataBean, HomeLis
         return R.layout.layout_base_list;
     }
 
+    private String type;
+
     @Override
     protected HomeListPresent providePresent() {
-        String type="";
         Bundle arguments = getArguments();
         if (arguments != null){
             type = arguments.getString("type");

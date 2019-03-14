@@ -1,4 +1,9 @@
-apply plugin: 'com.android.library'
+if (isModule.toBoolean()) {
+    apply plugin: 'com.android.library'
+}else {
+    apply plugin: 'com.android.application'
+}
+//apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.androidVersionConfig.androidCompileSdkVersion
